@@ -1,11 +1,20 @@
-import yaml
-import re
 
+import re
 from num2words import num2words
 from deep_translator import GoogleTranslator
-
-with open('conf/en2km.yaml', 'r') as file:
-    km2en = yaml.safe_load(file)
+    
+km2en = {
+    '០': 0,
+    '១': 1,
+    '២': 2,
+    '៣': 3,
+    '៤': 4,
+    '៥': 5,
+    '៦': 6,
+    '៧': 7,
+    '៨': 8,
+    '៩': 9
+}
 
 def transform_km2en(input: str) -> str:
     """Find the Khmer number and replace with English number
@@ -53,11 +62,10 @@ def en2km(inputs: dict) -> dict:
 
 if __name__ == '__main__':
     
-  transformed = transform_km2en('ឆ្នាំនេះ២៦ ម៉ែអាតាប៉ែ៩ហើយ 100')
+  transformed = transform_km2en('ឆ្នាំ២០២៦ គឺជាឆ្នាំមួយនៅក្នុងសតវត្សទី២១')
   nums = get_nums(transformed)
   str_nums = nums2texts(nums)
   print(str_nums)
   
   tran_str_nums = en2km(str_nums)
   print(tran_str_nums)
-    

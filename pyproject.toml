@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "km_num2text"
-version = "0.1.0"
+version = "0.1.2"
 authors = [
   { name="Natt Korat", email="natt.korat@cadt.edu.kh" },
 ]
@@ -12,10 +12,12 @@ description = "This is a small project built for converting from number (roman o
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "yaml",
   "deep-translator",
   "num2words"
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [project.urls]
 "Homepage" = "https://github.com/nattkorat/km_num2text.git"

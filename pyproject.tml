@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "km_num2text"
+version = "0.1.0"
+authors = [
+  { name="Natt Korat", email="natt.korat@cadt.edu.kh" },
+]
+description = "This is a small project built for converting from number (roman or khmer) to text based."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "yaml",
+  "deep-translator",
+  "num2words"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/nattkorat/km_num2text.git"

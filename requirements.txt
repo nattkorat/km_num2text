@@ -1,0 +1,3 @@
+yaml
+deep-translator>=1.11
+num2words>=0.5

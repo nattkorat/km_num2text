@@ -1,7 +1,6 @@
 
 import re
-from num2words import num2words
-from deep_translator import GoogleTranslator
+from km_num2text import num2text
     
 km2en = {
     '០': 0,
@@ -46,18 +45,12 @@ def get_nums(input: str) -> list:
 def nums2texts(nums: list) -> dict:
     output = {}
     for num in nums:
-        output[str(num)] = num2words(num.replace(',', '')) # if the number has comma
+        num = num.replace(',', '')
+        num = int(float(num)) if float(num).is_integer() else float(num)
+        
+        output[str(num)] = num2text.num2text(num=num)
     
     return output
-
-def en2km(inputs: dict) -> dict:
-    outputs = {}
-    tranlator = GoogleTranslator(source='en', target='km')
-    
-    for k, v in inputs.items():
-        outputs[k] = tranlator.translate(v)
-    
-    return outputs
 
 
 if __name__ == '__main__':
@@ -67,5 +60,3 @@ if __name__ == '__main__':
   str_nums = nums2texts(nums)
   print(str_nums)
   
-  tran_str_nums = en2km(str_nums)
-  print(tran_str_nums)

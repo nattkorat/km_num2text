@@ -6,10 +6,9 @@ def num_normalize(input: str) -> str:
     nums = utils.get_nums(transformed)
     
     str_nums = utils.nums2texts(nums)
+
     
-    tran_str_nums = utils.en2km(str_nums)
-    
-    for k, v in tran_str_nums.items():
+    for k, v in str_nums.items():
         # if v comes with ។ -> remove it
         v_norm = v.replace('។', '')
         transformed = transformed.replace(k, v_norm)

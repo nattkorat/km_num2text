@@ -1,5 +1,7 @@
 from km_num2text import utils
 
+import re
+
 def num_normalize(input: str) -> str:
     transformed = utils.transform_km2en(input=input)
     
@@ -9,9 +11,9 @@ def num_normalize(input: str) -> str:
 
     
     for k, v in str_nums.items():
-        # if v comes with ។ -> remove it
         v_norm = v.replace('។', '')
-        transformed = transformed.replace(k, v_norm)
+        pattern = rf'(?<!\d){re.escape(k)}(?!\d)'
+        transformed = re.sub(pattern, v_norm, transformed)
        
     
     return transformed # after replace the number 

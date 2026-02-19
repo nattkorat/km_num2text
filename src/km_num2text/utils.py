@@ -25,14 +25,10 @@ def transform_km2en(input: str) -> str:
     Return: str
         Transform string from the original content
     """
-    output = ""
-    for char in input:
-        if char in km2en:
-            output += str(km2en[char])
-        else:
-            output += char
+    for k, v in km2en.items():
+        input.replace(k, str(v))
     
-    return output
+    return input
 
 def get_nums(input: str) -> list:
     """Find the number in the text and return back as the list
@@ -42,15 +38,77 @@ def get_nums(input: str) -> list:
      
     return numbers
 
+def str2num_type(str_n: str):
+    return int(float(str_n)) if float(str_n).is_integer() else float(str_n)
+
+def is_trailing_zero(str_num: str):
+    return str_num.startswith('0')
+
+def split_long_numbers(text, min_len=8, group=3):
+    def repl(match):
+        num = match.group()
+        return " ".join(
+            num[i:i+group] for i in range(0, len(num), group)
+        )
+
+    pattern = rf'(?<!\d)\d{{{min_len},}}(?!\d)'
+    return re.sub(pattern, repl, text).split()
+
+
 def nums2texts(nums: list) -> dict:
-    output = {}
-    for num in nums:
-        num = num.replace(',', '')
-        num = int(float(num)) if float(num).is_integer() else float(num)
-        
-        output[str(num)] = num2text.num2text(num=num)
+    """
+    Convert a list of numeric strings to their Khmer text equivalents.
     
+    Parameters
+    ----------
+    nums : list
+        List of numeric strings, possibly containing commas.
+    
+    Returns
+    -------
+    dict
+        Mapping from original string to Khmer text.
+    """
+    output = {}
+
+    for num in nums:
+        # Remove commas
+        c_num = num.replace(',', '')
+
+        # Convert string to proper numeric type
+        numeric_value = str2num_type(c_num)
+
+        # Handle trailing zero numbers with length > 1
+        if is_trailing_zero(c_num) and len(c_num) > 1:
+            first_digit_text = ''
+            rest_text = ''
+
+            if len(c_num) < 3:
+                # Simple case: "10" → remove leading '1', convert
+                numeric_value = str2num_type(c_num[1:])
+                rest_text = num2text.num2text(num=numeric_value)
+            else:
+                # Complex case: "100000000"
+                first_digit_text = num2text.num2text(str2num_type(c_num[0]))
+                rest = c_num[1:]
+
+                # If rest is long (>8 digits), split and convert each part
+                if len(rest) >= 8:
+                    splitted = split_long_numbers(rest)
+                    rest_text = ''.join(
+                        num2text.num2text(str2num_type(part))
+                        for part in splitted
+                    )
+                else:
+                    rest_text = num2text.num2text(str2num_type(rest))
+
+            output[str(num)] = first_digit_text + rest_text
+        else:
+            # Normal case: convert entire number
+            output[str(num)] = num2text.num2text(num=numeric_value)
+
     return output
+
 
 
 if __name__ == '__main__':
